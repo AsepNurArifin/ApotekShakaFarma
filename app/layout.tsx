@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import PublicShell from "./components/PublicShell";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: {
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="id" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-sans" suppressHydrationWarning>
         <PublicShell>{children}</PublicShell>
+        <SpeedInsights />
       </body>
     </html>
   );
