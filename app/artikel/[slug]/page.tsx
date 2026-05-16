@@ -80,7 +80,8 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <h2 className="text-2xl font-extrabold text-text-primary mb-6">Produk Terkait</h2>
+          <h2 className="text-2xl font-extrabold text-text-primary">Produk Terkait</h2>
+          <div className="w-[60px] h-1 bg-accent-500 mt-3 mb-6"></div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {relatedProducts.map((p) => (
               <ProductCard key={p.id} product={p} />

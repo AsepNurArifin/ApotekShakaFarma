@@ -18,11 +18,12 @@ export default async function PromosiPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         <div className="text-center mb-16 relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-r from-primary-200/40 to-green-300/40 rounded-full blur-[100px] opacity-60 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-gradient-to-r from-primary-200/40 to-pharmacy-200/40 rounded-full blur-[100px] opacity-60 pointer-events-none" />
           <div className="inline-flex items-center justify-center p-4 bg-gradient-to-br from-primary-500 to-primary-600 rounded-3xl shadow-xl shadow-primary-900/20 mb-6 text-white transform -rotate-3 hover:rotate-0 transition-transform duration-300">
             <Icons.Megaphone className="w-10 h-10" />
           </div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold text-text-primary mb-6 tracking-tight relative z-10">Poster Promosi</h1>
+          <h1 className="text-4xl sm:text-6xl font-extrabold text-text-primary tracking-tight relative z-10">Poster Promosi</h1>
+          <div className="w-[60px] h-1 bg-accent-500 mt-6 mb-6 mx-auto relative z-10"></div>
           <p className="text-text-secondary text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed relative z-10">
             Penawaran spesial, diskon menarik, dan produk unggulan terbaru dari Apotek Shaka Farma. Segera dapatkan sebelum kehabisan!
           </p>
@@ -75,12 +76,12 @@ export default async function PromosiPage() {
                       
                       {/* Animated CTA */}
                       <div className="relative group">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-green-400 to-green-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
+                        <div className="absolute -inset-1 bg-gradient-to-r from-pharmacy-400 to-pharmacy-600 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-pulse" />
                         <a
                           href={getPosterWALink(poster.title)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="relative inline-flex items-center gap-3 bg-gradient-to-br from-green-500 to-green-600 text-white font-extrabold px-8 py-4 rounded-2xl text-lg hover:shadow-xl hover:shadow-green-500/20 hover:-translate-y-1 transition-all"
+                          className="relative inline-flex items-center gap-3 bg-gradient-to-br from-pharmacy-500 to-pharmacy-700 text-white font-extrabold px-8 py-4 rounded-2xl text-lg hover:shadow-xl hover:shadow-pharmacy-500/20 hover:-translate-y-1 transition-all"
                         >
                           <Icons.MessageCircle className="w-6 h-6 animate-bounce" /> Tanya Promo via WhatsApp
                         </a>

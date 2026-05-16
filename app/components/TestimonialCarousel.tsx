@@ -12,22 +12,25 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
   return (
     <div className="relative max-w-2xl mx-auto">
       {/* Card */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 border border-primary-100 text-center">
+      <div className="bg-white rounded-2xl shadow-lg p-8 border border-primary-100 border-l-4 border-l-primary-500 text-center relative overflow-hidden">
+        <div className="absolute -top-4 -left-4 text-9xl text-accent-100 opacity-50 font-serif leading-none select-none pointer-events-none">
+          &ldquo;
+        </div>
         {/* Stars */}
-        <div className="flex justify-center gap-1 mb-4">
+        <div className="flex justify-center gap-1 mb-4 relative z-10">
           {Array.from({ length: 5 }).map((_, i) => (
             <span key={i} className={`text-xl ${i < testimonials[current].rating ? "text-accent-500" : "text-gray-200"}`}>★</span>
           ))}
         </div>
 
         {/* Content */}
-        <p className="text-text-secondary text-sm sm:text-base italic leading-relaxed mb-5">
+        <p className="text-text-secondary text-sm sm:text-base italic leading-relaxed mb-5 relative z-10">
           &ldquo;{testimonials[current].content}&rdquo;
         </p>
 
         {/* Author */}
-        <div className="flex items-center justify-center gap-3">
-          <div className="w-10 h-10 rounded-full gradient-primary flex items-center justify-center text-white font-bold text-sm">
+        <div className="flex items-center justify-center gap-3 relative z-10">
+          <div className="w-10 h-10 rounded-full bg-primary-800 flex items-center justify-center text-white font-bold text-sm">
             {testimonials[current].customerName.charAt(0)}
           </div>
           <div>

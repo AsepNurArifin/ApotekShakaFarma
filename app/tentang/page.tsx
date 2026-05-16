@@ -27,7 +27,8 @@ export default function TentangPage() {
           <div className="inline-flex items-center justify-center p-3 bg-white/10 rounded-2xl backdrop-blur-md border border-white/20 mb-6">
             <Icons.HeartPulse className="w-8 h-8 text-primary-200" />
           </div>
-          <h1 className="text-4xl sm:text-6xl font-extrabold mb-6 tracking-tight">Tentang Apotek Shaka Farma</h1>
+          <h1 className="text-4xl sm:text-6xl font-extrabold mb-4 tracking-tight">Tentang Apotek Shaka Farma</h1>
+          <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-6 mx-auto relative z-10"></div>
           <p className="text-primary-100 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
             Apotek independen terpercaya yang berkomitmen memberikan pelayanan kefarmasian terbaik dengan harga bersahabat.
           </p>
@@ -42,7 +43,8 @@ export default function TentangPage() {
               <div className="flex items-center gap-2 text-primary-600 font-bold mb-4 uppercase tracking-wider text-sm">
                 <Icons.Activity className="w-5 h-5" /> Sejarah & Visi Kami
               </div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary mb-6 leading-tight">Mendedikasikan Diri untuk Kesehatan Anda</h2>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary leading-tight">Mendedikasikan Diri untuk Kesehatan Anda</h2>
+              <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-6 relative z-10"></div>
               <div className="space-y-6 text-text-secondary leading-relaxed text-lg">
                 <p>
                   Apotek Shaka Farma didirikan dengan visi menjadi apotek masyarakat yang menyediakan obat-obatan berkualitas dengan harga yang terjangkau. Kami percaya bahwa akses terhadap pengobatan yang baik adalah hak setiap orang.
@@ -79,7 +81,8 @@ export default function TentangPage() {
         {/* Tim */}
         <section className="py-20" id="tim">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary mb-4">Tim Kami</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary">Tim Kami</h2>
+            <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-4 mx-auto relative z-10"></div>
             <p className="text-text-muted text-lg max-w-2xl mx-auto">Didukung oleh tenaga profesional yang siap melayani kebutuhan kesehatan Anda dengan sepenuh hati.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -104,7 +107,8 @@ export default function TentangPage() {
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
           <div className="relative z-10 text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">Cara Belanja Mudah</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Cara Belanja Mudah</h2>
+            <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-4 mx-auto relative z-10"></div>
             <p className="text-primary-200 text-lg">Pesan obat dari rumah, kami yang urus sisanya.</p>
           </div>
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -134,6 +138,7 @@ export default function TentangPage() {
               <div className="p-3 bg-primary-50 rounded-xl text-primary-600"><Icons.FileText className="w-6 h-6" /></div>
               <h2 className="text-2xl font-extrabold text-text-primary">Legalitas & Izin</h2>
             </div>
+            <div className="w-[60px] h-1 bg-accent-500 -mt-4 mb-6 relative z-10"></div>
             <div className="space-y-4">
               {[
                 { label: "Nomor Izin Apotek", value: "SI.APT/2024/XXXX", icon: Icons.ShieldCheck },
@@ -161,8 +166,8 @@ export default function TentangPage() {
                 <div className="p-3 bg-primary-50 rounded-xl text-primary-600"><Icons.Map className="w-6 h-6" /></div>
                 <h2 className="text-2xl font-extrabold text-text-primary">Lokasi & Jam Buka</h2>
               </div>
-              <div suppressHydrationWarning className={`inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full ${isOpenNow() ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-                <span suppressHydrationWarning className={`w-2 h-2 rounded-full ${isOpenNow() ? "bg-green-500 animate-pulse" : "bg-red-500"}`} />
+              <div suppressHydrationWarning className={`inline-flex items-center gap-2 text-xs font-bold px-3 py-1.5 rounded-full ${isOpenNow() ? "bg-pharmacy-100 text-pharmacy-700" : "bg-red-100 text-red-700"}`}>
+                <span suppressHydrationWarning className={`w-2 h-2 rounded-full ${isOpenNow() ? "bg-pharmacy-500 animate-pulse" : "bg-red-500"}`} />
                 {isOpenNow() ? "Buka" : "Tutup"}
               </div>
             </div>

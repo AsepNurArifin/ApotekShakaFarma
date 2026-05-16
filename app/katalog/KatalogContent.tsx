@@ -47,7 +47,8 @@ export default function KatalogContent({ products }: { products: Product[] }) {
         {/* Header section */}
         <div className="text-center mb-12 relative">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-primary-200/50 rounded-[100%] blur-[80px] opacity-40 pointer-events-none" />
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-text-primary mb-4 tracking-tight relative z-10">Katalog Produk</h1>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight relative z-10">Katalog Produk</h1>
+          <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-4 mx-auto relative z-10"></div>
           <p className="text-text-muted text-lg max-w-xl mx-auto leading-relaxed relative z-10">Temukan obat, vitamin, dan alat kesehatan terlengkap dengan harga terbaik.</p>
         </div>
 

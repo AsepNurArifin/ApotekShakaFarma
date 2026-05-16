@@ -5,7 +5,7 @@ import { Icons } from "./Icons";
 
 export default function Footer() {
   return (
-    <footer className="bg-surface-dark text-white">
+    <footer className="bg-primary-800 text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -25,7 +25,7 @@ export default function Footer() {
                 <div className="text-[0.6rem] font-medium tracking-wider uppercase text-primary-300">Apotek Terpercaya</div>
               </div>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
+            <p className="text-sm text-primary-200 leading-relaxed">
               Apotek independen terpercaya dengan harga bersahabat, stok lengkap, dan apoteker bersertifikat siap melayani Anda.
             </p>
             <div className="flex gap-3 mt-4">
@@ -50,7 +50,7 @@ export default function Footer() {
                 { href: "/tentang", label: "Tentang Kami" },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-gray-400 hover:text-primary-300 transition-colors link-underline">
+                  <Link href={link.href} className="text-sm text-primary-200 hover:text-white transition-colors link-underline">
                     {link.label}
                   </Link>
                 </li>
@@ -61,10 +61,10 @@ export default function Footer() {
           {/* Kontak */}
           <div>
             <h3 className="font-bold text-sm uppercase tracking-wider text-primary-300 mb-4">Kontak</h3>
-            <ul className="space-y-3 text-sm text-gray-400">
+            <ul className="space-y-3 text-sm text-primary-200">
               <li className="flex items-start gap-2">
                 <Icons.MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>Jl. Kesehatan No. 123, Kota Sehat, Jawa Barat 40123</span>
+                <span>Jl. Lintas Sumatera, Way Tuba, Kec. Way Tuba, Kabupaten Way Kanan, Lampung 34767</span>
               </li>
               <li className="flex items-center gap-2">
                 <Icons.Phone className="w-4 h-4 shrink-0" />
@@ -72,11 +72,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Icons.Clock className="w-4 h-4 shrink-0" />
-                <span>Senin-Sabtu: 08.00 - 21.00</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <span></span>
-                <span>Minggu: 09.00 - 17.00</span>
+                <span>Senin-Minggu: 07.00 - 21.00</span>
               </li>
             </ul>
           </div>
@@ -84,20 +80,20 @@ export default function Footer() {
           {/* Legalitas */}
           <div>
             <h3 className="font-bold text-sm uppercase tracking-wider text-primary-300 mb-4">Legalitas</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><span className="text-gray-500">No. Izin Apotek:</span><br />SI.APT/2024/XXXX</li>
-              <li><span className="text-gray-500">No. SIPA:</span><br />SIPA.2024/XXXX</li>
-              <li className="pt-2"><Link href="/syarat-ketentuan" className="hover:text-primary-300 transition-colors link-underline">Syarat & Ketentuan</Link></li>
-              <li><Link href="/kebijakan-privasi" className="hover:text-primary-300 transition-colors link-underline">Kebijakan Privasi</Link></li>
+            <ul className="space-y-2 text-sm text-primary-200">
+              <li><span className="text-primary-300">No. Izin Apotek:</span><br />SI.APT/2024/XXXX</li>
+              <li><span className="text-primary-300">No. SIPA:</span><br />SIPA.2024/XXXX</li>
+              <li className="pt-2"><Link href="/syarat-ketentuan" className="hover:text-white transition-colors link-underline">Syarat & Ketentuan</Link></li>
+              <li><Link href="/kebijakan-privasi" className="hover:text-white transition-colors link-underline">Kebijakan Privasi</Link></li>
             </ul>
           </div>
         </div>
       </div>
 
       {/* Disclaimer */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-primary-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <p className="text-xs text-gray-500 text-center leading-relaxed flex items-start justify-center gap-2">
+          <p className="text-xs text-primary-300 text-center leading-relaxed flex items-start justify-center gap-2">
             <Icons.AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span><strong>Disclaimer:</strong> Informasi yang tersedia di website ini tidak menggantikan saran medis profesional.
               Konsultasikan dengan apoteker kami sebelum menggunakan obat. Website ini bukan platform transaksi online.</span>
@@ -106,9 +102,9 @@ export default function Footer() {
       </div>
 
       {/* Copyright */}
-      <div className="border-t border-gray-800">
+      <div className="border-t border-primary-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <p className="text-xs text-gray-600 text-center">
+          <p className="text-xs text-primary-300 text-center">
             © {new Date().getFullYear()} Apotek Shaka Farma. All rights reserved.
           </p>
         </div>

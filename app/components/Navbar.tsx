@@ -34,14 +34,14 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "glass shadow-lg py-2"
+          ? "bg-primary-800/95 backdrop-blur-md shadow-lg py-2"
           : "bg-transparent py-4"
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group" id="nav-logo">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:scale-105 transition-transform bg-white">
             <Image 
               src="/logo.jpeg" 
               alt="Apotek Shaka Farma Logo" 
@@ -51,10 +51,10 @@ export default function Navbar() {
             />
           </div>
           <div className="flex flex-col">
-            <span className={`font-extrabold text-lg leading-tight ${scrolled ? "text-primary-700" : isDarkHero ? "text-white" : "text-primary-800"}`}>
+            <span className={`font-extrabold text-lg leading-tight ${scrolled || isDarkHero ? "text-white" : "text-primary-800"}`}>
               Shaka Farma
             </span>
-            <span className={`text-[0.6rem] font-medium tracking-wider uppercase ${scrolled ? "text-primary-500" : isDarkHero ? "text-primary-100" : "text-primary-500"}`}>
+            <span className={`text-[0.6rem] font-medium tracking-wider uppercase ${scrolled || isDarkHero ? "text-primary-200" : "text-primary-600"}`}>
               Apotek Terpercaya
             </span>
           </div>
@@ -71,10 +71,10 @@ export default function Navbar() {
                   id={`nav-${link.label.toLowerCase().replace(/\s/g, "-")}`}
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     isActive
-                      ? "bg-primary-500 text-white shadow-md"
-                      : scrolled || !isDarkHero
-                      ? "text-text-primary hover:text-primary-700 link-underline"
-                      : "text-white/90 hover:text-white link-underline"
+                      ? "text-accent-500 border-b-2 border-accent-500"
+                      : scrolled || isDarkHero
+                      ? "text-white/90 hover:text-white"
+                      : "text-text-primary hover:text-primary-700"
                   }`}
                 >
                   {link.label}
@@ -87,7 +87,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className={`md:hidden p-2 rounded-lg transition-colors ${scrolled || !isDarkHero ? "text-primary-700" : "text-white"}`}
+          className={`md:hidden p-2 rounded-lg transition-colors ${scrolled || isDarkHero ? "text-white" : "text-primary-800"}`}
           aria-label="Toggle menu"
           id="nav-mobile-toggle"
         >
@@ -103,7 +103,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="md:hidden glass border-t border-primary-100 animate-fade-in">
+        <div className="md:hidden bg-primary-800 border-t border-primary-700 animate-fade-in shadow-xl">
           <ul className="px-4 py-3 space-y-1">
             {NAV_LINKS.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
@@ -113,8 +113,8 @@ export default function Navbar() {
                     href={link.href}
                     className={`block px-4 py-3 rounded-lg text-sm font-semibold transition-colors ${
                       isActive
-                        ? "bg-primary-500 text-white"
-                        : "text-text-primary hover:bg-primary-50"
+                        ? "bg-primary-900 text-accent-500 border-l-4 border-accent-500"
+                        : "text-white hover:bg-primary-700"
                     }`}
                   >
                     {link.label}

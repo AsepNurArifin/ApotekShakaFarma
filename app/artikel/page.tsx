@@ -19,7 +19,8 @@ export default async function ArtikelPage() {
           <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-sm border border-gray-100 mb-6 text-primary-500">
             <Icons.BookOpen className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-text-primary mb-4 tracking-tight">Artikel & Tips Kesehatan</h1>
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-text-primary tracking-tight">Artikel & Tips Kesehatan</h1>
+          <div className="w-[60px] h-1 bg-accent-500 mt-4 mb-4 mx-auto relative z-10"></div>
           <p className="text-text-muted text-lg max-w-xl mx-auto leading-relaxed">Temukan wawasan terbaru dan panduan kesehatan terpercaya langsung dari tim apoteker ahli kami.</p>
         </div>
 
