@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { logoutAction } from "./actions";
 import { Icons } from "../components/Icons";
 
@@ -42,8 +43,15 @@ export default function AdminShell({ user, children }: { user: AdminUser; childr
       <aside className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-zinc-900 border-r border-zinc-800 flex flex-col transition-transform lg:translate-x-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}>
         {/* Logo */}
         <div className="p-5 border-b border-zinc-800">
-          <Link href="/admin" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-lg gradient-primary flex items-center justify-center text-white font-extrabold text-sm">SF</div>
+          <Link href="/admin" className="flex items-center gap-3">
+            <div className="relative w-9 h-9 rounded-lg overflow-hidden">
+              <Image 
+                src="/logo.jpeg" 
+                alt="Apotek Shaka Farma Logo" 
+                fill
+                className="object-cover"
+              />
+            </div>
             <div>
               <div className="font-extrabold text-sm text-zinc-100">Shaka Farma</div>
               <div className="text-[0.6rem] text-zinc-500 uppercase tracking-wider">Admin Panel</div>

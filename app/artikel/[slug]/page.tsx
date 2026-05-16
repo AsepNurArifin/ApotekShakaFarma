@@ -1,27 +1,29 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getArticleBySlug, getProductById, articles } from "@/lib/data";
+import { getArticleBySlug, getProductById } from "@/lib/public-data";
 import ProductCard from "../../components/ProductCard";
+import { Icons } from "../../components/Icons";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
   if (!article) return { title: "Artikel Tidak Ditemukan" };
   return { title: article.title, description: article.excerpt };
 }
 
 export default async function ArtikelDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug);
+  const article = await getArticleBySlug(slug);
   if (!article) notFound();
 
-  const relatedProducts = article.relatedProductIds
-    .map((id) => getProductById(id))
-    .filter(Boolean) as NonNullable<ReturnType<typeof getProductById>>[];
+  // Fetch related products
+  const relatedProductPromises = (article.relatedProductIds || []).map((id) => getProductById(id));
+  const relatedResults = await Promise.all(relatedProductPromises);
+  const relatedProducts = relatedResults.filter(Boolean) as NonNullable<Awaited<ReturnType<typeof getProductById>>>[];
 
   return (
-    <div className="pt-24 pb-16">
+    <div className="pt-24 pb-16 bg-surface-dim min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-text-muted mb-8">
@@ -34,7 +36,8 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
 
         {/* Header */}
         <div className="mb-8">
-          <div className="text-sm text-text-muted mb-3">
+          <div className="flex items-center gap-2 text-sm text-primary-600 font-medium mb-3">
+            <Icons.Calendar className="w-4 h-4" />
             {new Date(article.createdAt).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-text-primary leading-tight mb-4">{article.title}</h1>
@@ -42,17 +45,22 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
         </div>
 
         {/* Image */}
-        <div className="aspect-video bg-gradient-to-br from-primary-50 to-primary-100 rounded-2xl flex items-center justify-center mb-8">
-          <span className="text-7xl">📝</span>
+        <div className="aspect-video bg-gradient-to-br from-primary-50 via-primary-100 to-white rounded-3xl flex items-center justify-center mb-8 overflow-hidden relative">
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10 mix-blend-overlay" />
+          <div className="w-24 h-24 bg-white/40 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg border border-white/50 text-primary-500">
+            <Icons.FileText className="w-12 h-12" />
+          </div>
         </div>
 
         {/* Content */}
-        <div className="prose prose-lg max-w-none mb-12">
-          {article.content.split("\n\n").map((paragraph, i) => (
-            <p key={i} className="text-text-secondary leading-relaxed mb-4 whitespace-pre-line">
-              {paragraph}
-            </p>
-          ))}
+        <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 mb-12">
+          <div className="prose prose-lg max-w-none">
+            {article.content.split("\n\n").map((paragraph, i) => (
+              <p key={i} className="text-text-secondary leading-relaxed mb-4 whitespace-pre-line">
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
 
         {/* Share */}

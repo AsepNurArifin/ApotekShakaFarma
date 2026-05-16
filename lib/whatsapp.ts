@@ -2,7 +2,7 @@
 // WhatsApp CTA Helper Functions
 // ==========================================
 
-const WA_PHONE = "6281234567890"; // Ganti dengan nomor WhatsApp apotek
+const WA_PHONE = "6281248454330"; // Ganti dengan nomor WhatsApp apotek
 
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat("id-ID", {
@@ -29,5 +29,5 @@ export function getGeneralWALink(): string {
 }
 
 export function getWAPhoneDisplay(): string {
-  return "+62 812-3456-7890";
+  return "+62 812-4845-4330";
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { testimonials, getPopularProducts, getActivePosters, getPosterProducts } from "@/lib/data";
-import { Category, CategoryLabel, CategoryIcon } from "@/lib/types";
+import { Category, CategoryLabel } from "@/lib/types";
 import { getGeneralWALink, getPosterWALink } from "@/lib/whatsapp";
+import { getPopularProducts, getActivePosters, getPosterProducts, getTestimonials } from "@/lib/public-data";
 import ProductCard from "./components/ProductCard";
 import SearchBar from "./components/SearchBar";
 import TestimonialCarousel from "./components/TestimonialCarousel";
@@ -17,9 +17,12 @@ const advantages = [
   { icon: <Icons.ShieldCheck className="w-10 h-10 text-primary-600 mx-auto" />, title: "Privasi Terjaga", desc: "Data konsultasi Anda aman bersama kami" },
 ];
 
-export default function Home() {
-  const popularProducts = getPopularProducts(8);
-  const activePosters = getActivePosters();
+export default async function Home() {
+  const [popularProducts, activePosters, testimonials] = await Promise.all([
+    getPopularProducts(8),
+    getActivePosters(),
+    getTestimonials(),
+  ]);
 
   return (
     <>
@@ -81,7 +84,9 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-end justify-between mb-10">
               <div>
-                <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 text-xs font-bold px-3 py-1.5 rounded-full mb-3">📢 Info Promosi</div>
+                <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-700 text-xs font-bold px-3 py-1.5 rounded-full mb-3">
+                  <Icons.Megaphone className="w-3.5 h-3.5" /> Info Promosi
+                </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-text-primary">Poster Promosi Terbaru</h2>
                 <p className="text-text-muted mt-1 text-sm">Lihat promosi terbaru dari Apotek Shaka Farma</p>
               </div>
@@ -93,11 +98,15 @@ export default function Home() {
               {activePosters.slice(0, 3).map((poster) => (
                 <div key={poster.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 card-hover group">
                   <Link href={`/promosi#${poster.id}`}>
-                    <div className="aspect-[4/5] bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center relative img-zoom-container">
-                      <div className="text-center p-6 img-zoom flex flex-col items-center">
-                        <Icons.Image className="w-16 h-16 text-primary-300 mb-4" />
-                        <p className="font-bold text-primary-700 text-lg">{poster.title}</p>
-                      </div>
+                    <div className="aspect-4/5 bg-linear-to-br from-primary-100 to-primary-200 flex items-center justify-center relative img-zoom-container">
+                      {poster.imageUrl ? (
+                        <img src={poster.imageUrl} alt={poster.title} className="w-full h-full object-cover img-zoom" />
+                      ) : (
+                        <div className="text-center p-6 img-zoom flex flex-col items-center">
+                          <Icons.Image className="w-16 h-16 text-primary-300 mb-4" />
+                          <p className="font-bold text-primary-700 text-lg">{poster.title}</p>
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-primary-700/0 group-hover:bg-primary-700/5 transition-colors" />
                     </div>
                   </Link>
@@ -187,15 +196,17 @@ export default function Home() {
       </section>
 
       {/* ===== TESTIMONI ===== */}
-      <section className="py-16" id="testimoni">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-text-primary">Apa Kata Pelanggan Kami?</h2>
-            <p className="text-text-muted mt-2">Kepuasan pelanggan adalah prioritas utama kami</p>
+      {testimonials.length > 0 && (
+        <section className="py-16" id="testimoni">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-text-primary">Apa Kata Pelanggan Kami?</h2>
+              <p className="text-text-muted mt-2">Kepuasan pelanggan adalah prioritas utama kami</p>
+            </div>
+            <TestimonialCarousel testimonials={testimonials} />
           </div>
-          <TestimonialCarousel testimonials={testimonials} />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== CTA FINAL ===== */}
       <section className="py-20 gradient-hero text-center relative overflow-hidden border-t border-gray-100" id="cta-final">

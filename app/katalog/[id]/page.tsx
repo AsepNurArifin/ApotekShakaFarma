@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProductById, getRelatedProducts } from "@/lib/data";
+import { getProductById, getRelatedProducts } from "@/lib/public-data";
 import { CategoryLabel, StockLabel } from "@/lib/types";
 import { formatPrice, getProductWALink } from "@/lib/whatsapp";
 import ProductCard from "../../components/ProductCard";
@@ -19,7 +19,7 @@ function getStockBadge(s: string) {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await getProductById(id);
   if (!product) return { title: "Produk Tidak Ditemukan" };
   return {
     title: product.name,
@@ -29,10 +29,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await getProductById(id);
   if (!product) notFound();
 
-  const related = getRelatedProducts(product, 4);
+  const related = await getRelatedProducts(product, 4);
   const waLink = getProductWALink(product.name, product.price);
 
   return (
@@ -47,8 +47,12 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-16">
-          <div className="bg-surface-dim rounded-2xl aspect-square flex items-center justify-center img-zoom-container group">
-            {getCategoryIcon(product.category, "w-40 h-40 text-gray-200 img-zoom")}
+          <div className="bg-surface-dim rounded-2xl aspect-square flex items-center justify-center img-zoom-container group overflow-hidden">
+            {product.imageUrl ? (
+              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover img-zoom" />
+            ) : (
+              getCategoryIcon(product.category, "w-40 h-40 text-gray-200 img-zoom")
+            )}
           </div>
 
           <div>

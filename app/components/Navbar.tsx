@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const NAV_LINKS = [
   { href: "/", label: "Beranda" },
@@ -16,6 +17,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const isDarkHero = pathname === "/" || pathname === "/tentang";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -37,15 +40,21 @@ export default function Navbar() {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group" id="nav-logo">
-          <div className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center text-white font-extrabold text-lg shadow-md group-hover:scale-105 transition-transform">
-            SF
+        <Link href="/" className="flex items-center gap-3 group" id="nav-logo">
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden shadow-md group-hover:scale-105 transition-transform">
+            <Image 
+              src="/logo.jpeg" 
+              alt="Apotek Shaka Farma Logo" 
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
           <div className="flex flex-col">
-            <span className={`font-extrabold text-lg leading-tight ${scrolled ? "text-primary-700" : "text-white"}`}>
+            <span className={`font-extrabold text-lg leading-tight ${scrolled ? "text-primary-700" : isDarkHero ? "text-white" : "text-primary-800"}`}>
               Shaka Farma
             </span>
-            <span className={`text-[0.6rem] font-medium tracking-wider uppercase ${scrolled ? "text-primary-500" : "text-primary-100"}`}>
+            <span className={`text-[0.6rem] font-medium tracking-wider uppercase ${scrolled ? "text-primary-500" : isDarkHero ? "text-primary-100" : "text-primary-500"}`}>
               Apotek Terpercaya
             </span>
           </div>
@@ -63,7 +72,7 @@ export default function Navbar() {
                   className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     isActive
                       ? "bg-primary-500 text-white shadow-md"
-                      : scrolled
+                      : scrolled || !isDarkHero
                       ? "text-text-primary hover:text-primary-700 link-underline"
                       : "text-white/90 hover:text-white link-underline"
                   }`}
@@ -78,7 +87,7 @@ export default function Navbar() {
         {/* Mobile Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className={`md:hidden p-2 rounded-lg transition-colors ${scrolled ? "text-primary-700" : "text-white"}`}
+          className={`md:hidden p-2 rounded-lg transition-colors ${scrolled || !isDarkHero ? "text-primary-700" : "text-white"}`}
           aria-label="Toggle menu"
           id="nav-mobile-toggle"
         >

@@ -22,16 +22,32 @@
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.log
+*.tmp
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# debug & temporary scripts
+diagnose.js
+diagnose.ts
+fix-rls.js
+test-*.js
+test-*.ts
+*.local
 
-# env files (can opt-in for committing if needed)
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# env files
+.env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
 
 # vercel
 .vercel
@@ -39,3 +55,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI / Agent footprint (if you want to hide the 'vibe')
+AGENTS.md
+REFACTOR_SUMMARY.md
+
+dianose.js
+dianose.ts
+fix-rls.js
+
+PANDUAN_DEVELOPER.md

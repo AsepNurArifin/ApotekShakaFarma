@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Image from "next/image";
 import { loginAction } from "../actions";
 import { Icons } from "@/app/components/Icons";
 
@@ -12,8 +13,14 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white font-extrabold text-2xl mx-auto mb-4 shadow-lg">
-            SF
+          <div className="relative w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg ring-4 ring-white/20">
+            <Image 
+              src="/logo.jpeg" 
+              alt="Apotek Shaka Farma Logo" 
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
           <h1 className="text-2xl font-extrabold text-white">Admin Panel</h1>
           <p className="text-white/60 text-sm mt-1">Apotek Shaka Farma</p>
