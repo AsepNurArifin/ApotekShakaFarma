@@ -37,30 +37,37 @@ export default function PosterPage() {
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true);
-    const fd = new FormData(e.currentTarget);
-    let imageUrl = editing?.image_url || "";
-    if (imageFile) {
-      const uploadFD = new FormData();
-      uploadFD.append("file", imageFile);
-      uploadFD.append("folder", "posters");
-      const upRes = await adminUploadImage(uploadFD);
-      if (upRes.error) { showFB("error", `Upload gagal: ${upRes.error}`); setSaving(false); return; }
-      imageUrl = upRes.url || "";
+    try {
+      const fd = new FormData(e.currentTarget);
+      let imageUrl = editing?.image_url || "";
+      if (imageFile) {
+        const uploadFD = new FormData();
+        uploadFD.append("file", imageFile);
+        uploadFD.append("folder", "posters");
+        const upRes = await adminUploadImage(uploadFD);
+        if (upRes.error) { showFB("error", `Upload gagal: ${upRes.error}`); setSaving(false); return; }
+        imageUrl = upRes.url || "";
+      }
+      if (!editing && !imageFile) { showFB("error", "Gambar poster wajib diupload!"); setSaving(false); return; }
+      
+      const record = { 
+        title: fd.get("title") as string, 
+        description: fd.get("description") as string, 
+        is_active: fd.get("is_active") === "on",
+        image_url: imageUrl,
+        linked_product_ids: [],
+      };
+      
+      const res = editing ? await updatePoster(editing.id, record) : await createPoster(record);
+      if (res.error) { showFB("error", res.error); setSaving(false); return; }
+      showFB("success", editing ? "Poster diupdate!" : "Poster diupload!");
+      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); fetchPosters();
+    } catch (err: any) {
+      console.error("handleSave error:", err);
+      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
+    } finally {
+      setSaving(false);
     }
-    if (!editing && !imageFile) { showFB("error", "Gambar poster wajib diupload!"); setSaving(false); return; }
-    
-    const record = { 
-      title: fd.get("title") as string, 
-      description: fd.get("description") as string, 
-      is_active: fd.get("is_active") === "on",
-      image_url: imageUrl,
-      linked_product_ids: [],
-    };
-    
-    const res = editing ? await updatePoster(editing.id, record) : await createPoster(record);
-    if (res.error) { showFB("error", res.error); setSaving(false); return; }
-    showFB("success", editing ? "Poster diupdate!" : "Poster diupload!");
-    setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); setSaving(false); fetchPosters();
   }
 
   async function toggleActive(id: string, current: boolean) {

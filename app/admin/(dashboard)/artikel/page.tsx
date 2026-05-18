@@ -36,21 +36,28 @@ export default function ArtikelAdminPage() {
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true);
-    const fd = new FormData(e.currentTarget);
-    const title = fd.get("title") as string;
-    const record = { 
-      title, 
-      slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), 
-      excerpt: fd.get("excerpt") as string, 
-      content: fd.get("content") as string, 
-      is_published: fd.get("is_published") === "on",
-      image_url: null,
-      related_product_ids: [],
-    };
-    const res = editing ? await updateArticle(editing.id, record) : await createArticle(record);
-    if (res.error) { showFB("error", res.error); setSaving(false); return; }
-    showFB("success", editing ? "Artikel diupdate!" : "Artikel ditambahkan!");
-    setShowForm(false); setEditing(null); setSaving(false); fetchItems();
+    try {
+      const fd = new FormData(e.currentTarget);
+      const title = fd.get("title") as string;
+      const record = { 
+        title, 
+        slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), 
+        excerpt: fd.get("excerpt") as string, 
+        content: fd.get("content") as string, 
+        is_published: fd.get("is_published") === "on",
+        image_url: null,
+        related_product_ids: [],
+      };
+      const res = editing ? await updateArticle(editing.id, record) : await createArticle(record);
+      if (res.error) { showFB("error", res.error); return; }
+      showFB("success", editing ? "Artikel diupdate!" : "Artikel ditambahkan!");
+      setShowForm(false); setEditing(null); fetchItems();
+    } catch (err: any) {
+      console.error("handleSave error:", err);
+      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleDelete(id: string) {

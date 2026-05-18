@@ -61,45 +61,52 @@ export default function ProdukPage() {
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
-    const fd = new FormData(e.currentTarget);
+    try {
+      const fd = new FormData(e.currentTarget);
 
-    let imageUrl = editing?.image_url || null;
-    if (imageFile) {
-      const uploadFD = new FormData();
-      uploadFD.append("file", imageFile);
-      uploadFD.append("folder", "products");
-      const uploadRes = await adminUploadImage(uploadFD);
-      if (uploadRes.error) { showFB("error", `Gagal upload gambar: ${uploadRes.error}`); setSaving(false); return; }
-      imageUrl = uploadRes.url;
+      let imageUrl = editing?.image_url || null;
+      if (imageFile) {
+        const uploadFD = new FormData();
+        uploadFD.append("file", imageFile);
+        uploadFD.append("folder", "products");
+        const uploadRes = await adminUploadImage(uploadFD);
+        if (uploadRes.error) { showFB("error", `Gagal upload gambar: ${uploadRes.error}`); return; }
+        imageUrl = uploadRes.url;
+      }
+
+      const symptomsRaw = fd.get("symptoms") as string;
+      const symptoms = symptomsRaw ? symptomsRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
+      
+      const priceRaw = fd.get("price") as string;
+      const price = parseInt(priceRaw) || 0;
+
+      const record = {
+        name: fd.get("name") as string,
+        category: fd.get("category") as Category,
+        description: fd.get("description") as string,
+        indication: fd.get("indication") as string,
+        dosage: fd.get("dosage") as string,
+        price: price,
+        stock_status: fd.get("stock_status") as StockStatus,
+        symptoms: symptoms,
+        is_featured: fd.get("is_featured") === "on",
+        image_url: imageUrl,
+      };
+
+      const res = editing
+        ? await updateProduct(editing.id, record)
+        : await createProduct(record);
+
+      if (res.error) { showFB("error", `Gagal menyimpan: ${res.error}`); return; }
+      showFB("success", editing ? "Produk berhasil diupdate!" : "Produk berhasil ditambahkan!");
+      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null);
+      fetchProducts();
+    } catch (err: any) {
+      console.error("handleSave error:", err);
+      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
+    } finally {
+      setSaving(false);
     }
-
-    const symptomsRaw = fd.get("symptoms") as string;
-    const symptoms = symptomsRaw ? symptomsRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
-    
-    const priceRaw = fd.get("price") as string;
-    const price = parseInt(priceRaw) || 0;
-
-    const record = {
-      name: fd.get("name") as string,
-      category: fd.get("category") as Category,
-      description: fd.get("description") as string,
-      indication: fd.get("indication") as string,
-      dosage: fd.get("dosage") as string,
-      price: price,
-      stock_status: fd.get("stock_status") as StockStatus,
-      symptoms: symptoms,
-      is_featured: fd.get("is_featured") === "on",
-      image_url: imageUrl,
-    };
-
-    const res = editing
-      ? await updateProduct(editing.id, record)
-      : await createProduct(record);
-
-    if (res.error) { showFB("error", `Gagal menyimpan: ${res.error}`); setSaving(false); return; }
-    showFB("success", editing ? "Produk berhasil diupdate!" : "Produk berhasil ditambahkan!");
-    setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); setSaving(false);
-    fetchProducts();
   }
 
   async function handleDelete(id: string) {
