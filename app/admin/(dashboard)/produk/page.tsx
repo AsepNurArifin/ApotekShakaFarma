@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Icons } from "@/app/components/Icons";
 import { getProducts, createProduct, updateProduct, deleteProduct, adminUploadImage } from "../../domain-actions";
 import { Product, Category, StockStatus } from "@/lib/types";
+import { compressImage } from "@/lib/image-compress";
 
 type ProductRow = {
   id: string;
@@ -66,8 +67,9 @@ export default function ProdukPage() {
 
       let imageUrl = editing?.image_url || null;
       if (imageFile) {
+        const compressed = await compressImage(imageFile);
         const uploadFD = new FormData();
-        uploadFD.append("file", imageFile);
+        uploadFD.append("file", compressed);
         uploadFD.append("folder", "products");
         const uploadRes = await adminUploadImage(uploadFD);
         if (uploadRes.error) { showFB("error", `Gagal upload gambar: ${uploadRes.error}`); return; }

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Icons } from "@/app/components/Icons";
 import { getPosters, createPoster, updatePoster, deletePoster, adminUploadImage } from "../../domain-actions";
+import { compressImage, formatFileSize } from "@/lib/image-compress";
 
 type PosterRow = {
   id: string;
@@ -22,6 +23,7 @@ export default function PosterPage() {
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [compressInfo, setCompressInfo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function showFB(type: "success" | "error", msg: string) { setFeedback({ type, message: msg }); setTimeout(() => setFeedback(null), 4000); }
@@ -41,8 +43,10 @@ export default function PosterPage() {
       const fd = new FormData(e.currentTarget);
       let imageUrl = editing?.image_url || "";
       if (imageFile) {
+        // Kompres gambar otomatis sebelum upload
+        const compressed = await compressImage(imageFile);
         const uploadFD = new FormData();
-        uploadFD.append("file", imageFile);
+        uploadFD.append("file", compressed);
         uploadFD.append("folder", "posters");
         const upRes = await adminUploadImage(uploadFD);
         if (upRes.error) { showFB("error", `Upload gagal: ${upRes.error}`); setSaving(false); return; }
@@ -61,7 +65,7 @@ export default function PosterPage() {
       const res = editing ? await updatePoster(editing.id, record) : await createPoster(record);
       if (res.error) { showFB("error", res.error); setSaving(false); return; }
       showFB("success", editing ? "Poster diupdate!" : "Poster diupload!");
-      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); fetchPosters();
+      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); setCompressInfo(null); fetchPosters();
     } catch (err: any) {
       console.error("handleSave error:", err);
       showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
@@ -83,12 +87,18 @@ export default function PosterPage() {
     showFB("success", "Poster dihapus!"); fetchPosters();
   }
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) { setImageFile(file); const r = new FileReader(); r.onload = (ev) => setImagePreview(ev.target?.result as string); r.readAsDataURL(file); }
+    if (file) {
+      setImageFile(file);
+      setCompressInfo(`Asli: ${formatFileSize(file.size)} — akan dikompres otomatis saat upload`);
+      const r = new FileReader();
+      r.onload = (ev) => setImagePreview(ev.target?.result as string);
+      r.readAsDataURL(file);
+    }
   }
 
-  function openForm(item: PosterRow | null = null) { setEditing(item); setImageFile(null); setImagePreview(item?.image_url || null); setShowForm(true); }
+  function openForm(item: PosterRow | null = null) { setEditing(item); setImageFile(null); setImagePreview(item?.image_url || null); setCompressInfo(null); setShowForm(true); }
 
   return (<div>
     {feedback && <div className={`fixed top-4 right-4 z-100 px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl ${feedback.type === "success" ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>{feedback.message}</div>}
