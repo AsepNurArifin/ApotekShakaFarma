@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Katalog lengkap obat, vitamin, suplemen, dan alat kesehatan di Apotek Shaka Farma. Filter berdasarkan kategori, harga, dan promo.",
 };
 
+export const revalidate = 0;
+
 export default async function KatalogPage() {
   const products = await getProducts();
 

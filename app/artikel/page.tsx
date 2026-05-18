@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   description: "Baca artikel dan tips kesehatan dari Apotek Shaka Farma. Info seputar obat, vitamin, dan gaya hidup sehat.",
 };
 
+export const revalidate = 0;
+
 export default async function ArtikelPage() {
   const articles = await getArticles();
 

@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "Lihat poster promosi terbaru dari Apotek Shaka Farma. Info produk unggulan dan penawaran menarik.",
 };
 
+export const revalidate = 0;
+
 export default async function PromosiPage() {
   const activePosters = await getActivePosters();
 

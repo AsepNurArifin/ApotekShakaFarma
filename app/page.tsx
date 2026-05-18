@@ -18,6 +18,8 @@ const advantages = [
   { icon: <Icons.ShieldCheck className="w-10 h-10 text-primary-600 mx-auto" />, title: "Privasi Terjaga", desc: "Data konsultasi Anda aman bersama kami" },
 ];
 
+export const revalidate = 0;
+
 export default async function Home() {
   const [popularProducts, activePosters, testimonials] = await Promise.all([
     getPopularProducts(8),
