@@ -102,12 +102,12 @@ export default function PosterPage() {
 
   return (<div>
     {feedback && <div className={`fixed top-4 right-4 z-100 px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl ${feedback.type === "success" ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>{feedback.message}</div>}
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
       <div><h1 className="text-2xl font-extrabold text-zinc-100 flex items-center gap-2"><Icons.Image className="w-6 h-6 text-primary-500" /> Poster Promosi</h1><p className="text-zinc-400 text-sm mt-1">Upload poster seperti di Story WA &amp; Instagram</p></div>
-      <button onClick={() => openForm()} className="gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Upload Poster</button>
+      <button onClick={() => openForm()} className="w-full sm:w-auto gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Upload Poster</button>
     </div>
-    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
-      <div className="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
+    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
+      <div className="bg-zinc-900 rounded-2xl p-4 sm:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
         <h2 className="text-lg font-extrabold text-zinc-100 mb-4">{editing ? "Edit Poster" : "Upload Poster Baru"}</h2>
         <form onSubmit={handleSave} className="space-y-3">
           <input name="title" defaultValue={editing?.title} required placeholder="Judul poster" className="w-full px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-100 text-sm focus:border-primary-500 outline-none" />

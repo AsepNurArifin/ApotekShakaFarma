@@ -51,17 +51,17 @@ export default function InquiryPage() {
     </div>
     {loading ? <div className="text-center py-10 text-zinc-500">Memuat...</div> : <div className="space-y-3">
       {items.map(i => <div key={i.id} className="bg-zinc-900 rounded-xl border border-zinc-800/50 p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1"><span className="font-bold text-sm text-zinc-100">{i.name}</span><span className={`text-[0.6rem] font-bold px-2 py-0.5 rounded-full ${statusColors[i.status]}`}>{i.status === "NEW" ? "Baru" : i.status === "FOLLOWED_UP" ? "Ditindak" : "Selesai"}</span></div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex-1 w-full">
+            <div className="flex flex-wrap items-center gap-2 mb-1"><span className="font-bold text-sm text-zinc-100">{i.name}</span><span className={`text-[0.6rem] font-bold px-2 py-0.5 rounded-full ${statusColors[i.status]}`}>{i.status === "NEW" ? "Baru" : i.status === "FOLLOWED_UP" ? "Ditindak" : "Selesai"}</span></div>
             <p className="text-xs text-zinc-500 mb-1 flex items-center gap-1"><Icons.Phone className="w-3 h-3" /> {i.phone}</p>
-            <p className="text-sm text-zinc-400">{i.message}</p>
+            <p className="text-sm text-zinc-400 mt-2">{i.message}</p>
             <p className="text-xs text-zinc-600 mt-2">{new Date(i.created_at).toLocaleString("id-ID")}</p>
           </div>
-          <div className="flex flex-col gap-1 shrink-0">
-            {i.status === "NEW" && <button onClick={() => updateStatus(i.id, "FOLLOWED_UP")} className="text-xs bg-amber-500/10 text-amber-400 font-semibold px-3 py-1.5 rounded-lg">Tindak Lanjut</button>}
-            {i.status === "FOLLOWED_UP" && <button onClick={() => updateStatus(i.id, "CLOSED")} className="text-xs bg-green-500/10 text-green-400 font-semibold px-3 py-1.5 rounded-lg">Selesai</button>}
-            <a href={`https://wa.me/${i.phone?.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="text-xs bg-green-500/10 text-green-400 font-semibold px-3 py-1.5 rounded-lg text-center">Chat WA</a>
+          <div className="flex sm:flex-col gap-2 shrink-0 w-full sm:w-auto">
+            {i.status === "NEW" && <button onClick={() => updateStatus(i.id, "FOLLOWED_UP")} className="flex-1 sm:flex-none text-xs bg-amber-500/10 text-amber-400 font-semibold px-3 py-2 rounded-lg text-center">Tindak Lanjut</button>}
+            {i.status === "FOLLOWED_UP" && <button onClick={() => updateStatus(i.id, "CLOSED")} className="flex-1 sm:flex-none text-xs bg-green-500/10 text-green-400 font-semibold px-3 py-2 rounded-lg text-center">Selesai</button>}
+            <a href={`https://wa.me/${i.phone?.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer" className="flex-1 sm:flex-none text-xs bg-green-500/10 text-green-400 font-semibold px-3 py-2 rounded-lg text-center">Chat WA</a>
           </div>
         </div>
       </div>)}

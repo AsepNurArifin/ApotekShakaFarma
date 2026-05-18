@@ -69,12 +69,12 @@ export default function TestimoniPage() {
 
   return (<div>
     {feedback && <div className={`fixed top-4 right-4 z-100 px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl ${feedback.type === "success" ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>{feedback.message}</div>}
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
       <div><h1 className="text-2xl font-extrabold text-zinc-100 flex items-center gap-2"><Icons.Star className="w-6 h-6 text-primary-500" /> Testimoni</h1><p className="text-zinc-400 text-sm mt-1">{items.length} testimoni</p></div>
-      <button onClick={() => { setEditing(null); setShowForm(true); }} className="gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tambah</button>
+      <button onClick={() => { setEditing(null); setShowForm(true); }} className="w-full sm:w-auto gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tambah</button>
     </div>
-    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
-      <div className="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full border border-zinc-800" onClick={e => e.stopPropagation()}>
+    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
+      <div className="bg-zinc-900 rounded-2xl p-4 sm:p-6 max-w-lg w-full border border-zinc-800" onClick={e => e.stopPropagation()}>
         <h2 className="text-lg font-extrabold text-zinc-100 mb-4">{editing ? "Edit" : "Tambah"} Testimoni</h2>
         <form onSubmit={handleSave} className="space-y-3">
           <input name="customer_name" defaultValue={editing?.customer_name} required placeholder="Nama pelanggan" className="w-full px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-100 text-sm focus:border-primary-500 outline-none" />
@@ -91,19 +91,19 @@ export default function TestimoniPage() {
       </div>
     </div>}
     {loading ? <div className="text-center py-10 text-zinc-500">Memuat...</div> : <div className="space-y-3">
-      {items.map(t => <div key={t.id} className="bg-zinc-900 rounded-xl border border-zinc-800/50 p-4 flex items-start gap-4">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
+      {items.map(t => <div key={t.id} className="bg-zinc-900 rounded-xl border border-zinc-800/50 p-4 flex flex-col sm:flex-row items-start gap-4">
+        <div className="flex-1 w-full">
+          <div className="flex flex-wrap items-center gap-2 mb-1">
             <span className="font-bold text-sm text-zinc-100">{t.customer_name}</span>
             <span className="text-xs text-amber-400">{"★".repeat(t.rating)}</span>
             <span className={`text-[0.6rem] font-bold px-2 py-0.5 rounded-full ${t.is_published ? "bg-green-500/10 text-green-400" : "bg-zinc-800 text-zinc-500"}`}>{t.is_published ? "Published" : "Draft"}</span>
           </div>
-          <p className="text-sm text-zinc-400">{t.content}</p>
+          <p className="text-sm text-zinc-400 mt-2">{t.content}</p>
         </div>
-        <div className="flex gap-2 text-xs shrink-0">
-          <button onClick={() => togglePublish(t.id, t.is_published)} className="text-primary-400 font-semibold">{t.is_published ? "Unpublish" : "Publish"}</button>
-          <button onClick={() => { setEditing(t); setShowForm(true); }} className="text-primary-400 font-semibold">Edit</button>
-          <button onClick={() => handleDelete(t.id)} className="text-red-400 font-semibold">Hapus</button>
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 text-xs shrink-0 w-full sm:w-auto mt-2 sm:mt-0 justify-start sm:justify-end">
+          <button onClick={() => togglePublish(t.id, t.is_published)} className="text-primary-400 font-semibold px-2 py-1 bg-primary-500/10 rounded-lg">{t.is_published ? "Unpublish" : "Publish"}</button>
+          <button onClick={() => { setEditing(t); setShowForm(true); }} className="text-primary-400 font-semibold px-2 py-1 bg-primary-500/10 rounded-lg">Edit</button>
+          <button onClick={() => handleDelete(t.id)} className="text-red-400 font-semibold px-2 py-1 bg-red-500/10 rounded-lg">Hapus</button>
         </div>
       </div>)}
       {items.length === 0 && <div className="text-center py-10 text-zinc-500 bg-zinc-900 rounded-2xl border border-zinc-800/50">Belum ada testimoni.</div>}

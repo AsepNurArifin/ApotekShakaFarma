@@ -142,19 +142,19 @@ export default function ProdukPage() {
           {feedback.message}
         </div>
       )}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-extrabold text-zinc-100 flex items-center gap-2"><Icons.Box className="w-6 h-6 text-primary-500" /> Kelola Produk</h1>
           <p className="text-zinc-400 text-sm mt-1">{products.length} produk total</p>
         </div>
-        <button onClick={() => openForm()} className="gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tambah Produk</button>
+        <button onClick={() => openForm()} className="w-full sm:w-auto gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tambah Produk</button>
       </div>
       <div className="mb-4">
         <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Cari produk..." className="w-full max-w-sm px-4 py-2.5 rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-100 focus:border-primary-500 outline-none text-sm placeholder:text-zinc-500" />
       </div>
       {showForm && (
-        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
-          <div className="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
+          <div className="bg-zinc-900 rounded-2xl p-4 sm:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
             <h2 className="text-lg font-extrabold text-zinc-100 mb-4">{editing ? "Edit Produk" : "Tambah Produk"}</h2>
             <form onSubmit={handleSave} className="space-y-3">
               <input name="name" defaultValue={editing?.name} required placeholder="Nama produk" className="w-full px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-100 text-sm focus:border-primary-500 outline-none" />
@@ -193,17 +193,17 @@ export default function ProdukPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-zinc-950/50 text-zinc-400"><tr>
-                <th className="px-4 py-3 text-left font-semibold">Gambar</th><th className="px-4 py-3 text-left font-semibold">Nama</th><th className="px-4 py-3 text-left font-semibold">Kategori</th><th className="px-4 py-3 text-left font-semibold">Harga</th><th className="px-4 py-3 text-left font-semibold">Stok</th><th className="px-4 py-3 text-left font-semibold">Aksi</th>
+                <th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Gambar</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Nama</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Kategori</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Harga</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Stok</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Aksi</th>
               </tr></thead>
               <tbody className="divide-y divide-zinc-800">
                 {filtered.map(p => (
                   <tr key={p.id} className="hover:bg-zinc-800/50">
-                    <td className="px-4 py-3">{p.image_url ? <img src={p.image_url} alt={p.name} className="w-10 h-10 rounded-lg object-cover" /> : <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center"><Icons.Box className="w-5 h-5 text-zinc-600" /></div>}</td>
-                    <td className="px-4 py-3 font-medium text-zinc-100">{p.name}</td>
-                    <td className="px-4 py-3 text-zinc-400">{p.category}</td>
-                    <td className="px-4 py-3 text-zinc-400">Rp {p.price?.toLocaleString("id-ID")}</td>
-                    <td className="px-4 py-3"><span className={`text-xs font-bold px-2 py-1 rounded ${p.stock_status === "TERSEDIA" ? "bg-green-500/10 text-green-400" : p.stock_status === "TERBATAS" ? "bg-amber-500/10 text-amber-400" : "bg-red-500/10 text-red-400"}`}>{p.stock_status}</span></td>
-                    <td className="px-4 py-3"><div className="flex gap-2"><button onClick={() => openForm(p)} className="text-primary-400 hover:text-primary-300 font-medium">Edit</button><button onClick={() => handleDelete(p.id)} className="text-red-400 hover:text-red-300 font-medium">Hapus</button></div></td>
+                    <td className="px-4 py-3 whitespace-nowrap">{p.image_url ? <img src={p.image_url} alt={p.name} className="w-10 h-10 rounded-lg object-cover min-w-[40px]" /> : <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center min-w-[40px]"><Icons.Box className="w-5 h-5 text-zinc-600" /></div>}</td>
+                    <td className="px-4 py-3 font-medium text-zinc-100 min-w-[150px]">{p.name}</td>
+                    <td className="px-4 py-3 text-zinc-400 whitespace-nowrap">{p.category}</td>
+                    <td className="px-4 py-3 text-zinc-400 whitespace-nowrap">Rp {p.price?.toLocaleString("id-ID")}</td>
+                    <td className="px-4 py-3 whitespace-nowrap"><span className={`text-xs font-bold px-2 py-1 rounded ${p.stock_status === "TERSEDIA" ? "bg-green-500/10 text-green-400" : p.stock_status === "TERBATAS" ? "bg-amber-500/10 text-amber-400" : "bg-red-500/10 text-red-400"}`}>{p.stock_status}</span></td>
+                    <td className="px-4 py-3 whitespace-nowrap"><div className="flex gap-2"><button onClick={() => openForm(p)} className="text-primary-400 hover:text-primary-300 font-medium px-2 py-1">Edit</button><button onClick={() => handleDelete(p.id)} className="text-red-400 hover:text-red-300 font-medium px-2 py-1">Hapus</button></div></td>
                   </tr>
                 ))}
               </tbody>

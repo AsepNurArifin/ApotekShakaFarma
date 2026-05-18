@@ -69,12 +69,12 @@ export default function ArtikelAdminPage() {
 
   return (<div>
     {feedback && <div className={`fixed top-4 right-4 z-100 px-5 py-3 rounded-xl text-sm font-semibold shadow-2xl ${feedback.type === "success" ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>{feedback.message}</div>}
-    <div className="flex items-center justify-between mb-6">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
       <div><h1 className="text-2xl font-extrabold text-zinc-100 flex items-center gap-2"><Icons.FileText className="w-6 h-6 text-primary-500" /> Artikel</h1><p className="text-zinc-400 text-sm mt-1">{items.length} artikel</p></div>
-      <button onClick={() => { setEditing(null); setShowForm(true); }} className="gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tulis Artikel</button>
+      <button onClick={() => { setEditing(null); setShowForm(true); }} className="w-full sm:w-auto gradient-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:opacity-90">+ Tulis Artikel</button>
     </div>
-    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
-      <div className="bg-zinc-900 rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
+    {showForm && <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm" onClick={() => setShowForm(false)}>
+      <div className="bg-zinc-900 rounded-2xl p-4 sm:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-zinc-800" onClick={e => e.stopPropagation()}>
         <h2 className="text-lg font-extrabold text-zinc-100 mb-4">{editing ? "Edit" : "Tulis"} Artikel</h2>
         <form onSubmit={handleSave} className="space-y-3">
           <input name="title" defaultValue={editing?.title} required placeholder="Judul artikel" className="w-full px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-zinc-100 text-sm focus:border-primary-500 outline-none" />
@@ -89,15 +89,17 @@ export default function ArtikelAdminPage() {
       </div>
     </div>}
     {loading ? <div className="text-center py-10 text-zinc-500">Memuat...</div> : <div className="bg-zinc-900 rounded-2xl border border-zinc-800/50 overflow-hidden">
-      <table className="w-full text-sm">
-        <thead className="bg-zinc-950/50 text-zinc-400"><tr><th className="px-4 py-3 text-left font-semibold">Judul</th><th className="px-4 py-3 text-left font-semibold">Status</th><th className="px-4 py-3 text-left font-semibold">Tanggal</th><th className="px-4 py-3 text-left font-semibold">Aksi</th></tr></thead>
-        <tbody className="divide-y divide-zinc-800">{items.map(a => <tr key={a.id} className="hover:bg-zinc-800/50">
-          <td className="px-4 py-3 font-medium text-zinc-100">{a.title}</td>
-          <td className="px-4 py-3"><span className={`text-xs font-bold px-2 py-1 rounded ${a.is_published ? "bg-green-500/10 text-green-400" : "bg-zinc-800 text-zinc-500"}`}>{a.is_published ? "Published" : "Draft"}</span></td>
-          <td className="px-4 py-3 text-zinc-500">{new Date(a.created_at).toLocaleDateString("id-ID")}</td>
-          <td className="px-4 py-3"><div className="flex gap-2"><button onClick={() => { setEditing(a); setShowForm(true); }} className="text-primary-400 font-medium">Edit</button><button onClick={() => handleDelete(a.id)} className="text-red-400 font-medium">Hapus</button></div></td>
-        </tr>)}</tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead className="bg-zinc-950/50 text-zinc-400"><tr><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Judul</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Status</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Tanggal</th><th className="px-4 py-3 text-left font-semibold whitespace-nowrap">Aksi</th></tr></thead>
+          <tbody className="divide-y divide-zinc-800">{items.map(a => <tr key={a.id} className="hover:bg-zinc-800/50">
+            <td className="px-4 py-3 font-medium text-zinc-100 min-w-[200px]">{a.title}</td>
+            <td className="px-4 py-3 whitespace-nowrap"><span className={`text-xs font-bold px-2 py-1 rounded ${a.is_published ? "bg-green-500/10 text-green-400" : "bg-zinc-800 text-zinc-500"}`}>{a.is_published ? "Published" : "Draft"}</span></td>
+            <td className="px-4 py-3 text-zinc-500 whitespace-nowrap">{new Date(a.created_at).toLocaleDateString("id-ID")}</td>
+            <td className="px-4 py-3 whitespace-nowrap"><div className="flex gap-2"><button onClick={() => { setEditing(a); setShowForm(true); }} className="text-primary-400 font-medium px-2 py-1">Edit</button><button onClick={() => handleDelete(a.id)} className="text-red-400 font-medium px-2 py-1">Hapus</button></div></td>
+          </tr>)}</tbody>
+        </table>
+      </div>
       {items.length === 0 && <div className="text-center py-10 text-zinc-500">Belum ada artikel.</div>}
     </div>}
   </div>);
