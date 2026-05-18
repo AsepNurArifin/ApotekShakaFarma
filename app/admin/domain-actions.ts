@@ -2,6 +2,7 @@
 
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
+import { cache } from "react";
 import { 
   ProductSchema, 
   ArticleSchema, 
@@ -17,7 +18,7 @@ import {
 import { Product, Article, Poster, Testimonial, Inquiry } from "@/lib/types";
 
 // ==========================================
-// HELPER: Admin Client & Auth
+// HELPER: Admin Client & Auth (CACHED)
 // ==========================================
 
 function getAdminClient() {
@@ -27,27 +28,40 @@ function getAdminClient() {
   );
 }
 
-async function requireAuth() {
+// Cache auth check untuk menghindari multiple calls
+const requireAuth = cache(async () => {
   const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Tidak memiliki akses");
+  const { data: { user }, error } = await supabase.auth.getUser();
+  
+  if (error || !user) {
+    throw new Error("Tidak memiliki akses");
+  }
+  
   return user;
-}
+});
 
 // ==========================================
 // PRODUCTS
 // ==========================================
 
 export async function getProducts() {
-  await requireAuth();
-  const admin = getAdminClient();
-  const { data, error } = await admin
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: false });
-  
-  if (error) return { data: null, error: error.message };
-  return { data, error: null };
+  try {
+    await requireAuth();
+    const admin = getAdminClient();
+    const { data, error } = await admin
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+    
+    if (error) {
+      console.error("getProducts error:", error);
+      return { data: null, error: error.message };
+    }
+    return { data, error: null };
+  } catch (error: any) {
+    console.error("getProducts exception:", error);
+    return { data: null, error: error.message || "Terjadi kesalahan" };
+  }
 }
 
 export async function createProduct(input: ProductInput) {

@@ -18,6 +18,7 @@ export default function AdminLoginPage() {
               src="/logo.jpeg" 
               alt="Apotek Shaka Farma Logo" 
               fill
+              sizes="64px"
               className="object-cover"
               priority
             />

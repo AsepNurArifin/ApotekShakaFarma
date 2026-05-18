@@ -49,6 +49,7 @@ export default function AdminShell({ user, children }: { user: AdminUser; childr
                 src="/logo.jpeg" 
                 alt="Apotek Shaka Farma Logo" 
                 fill
+                sizes="36px"
                 className="object-cover"
               />
             </div>

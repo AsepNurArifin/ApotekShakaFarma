@@ -40,10 +40,20 @@ export default function ProdukPage() {
 
   async function fetchProducts() {
     setLoading(true);
-    const res = await getProducts();
-    if (res.error) showFB("error", `Gagal memuat: ${res.error}`);
-    setProducts(res.data || []);
-    setLoading(false);
+    try {
+      const res = await getProducts();
+      if (res.error) {
+        showFB("error", `Gagal memuat: ${res.error}`);
+        console.error("Error fetching products:", res.error);
+      } else {
+        setProducts(res.data || []);
+      }
+    } catch (error) {
+      showFB("error", "Terjadi kesalahan saat memuat data");
+      console.error("Fetch products error:", error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => { fetchProducts(); }, []);

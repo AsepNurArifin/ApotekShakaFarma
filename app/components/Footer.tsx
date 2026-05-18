@@ -17,6 +17,7 @@ export default function Footer() {
                   src="/logo.jpeg"
                   alt="Apotek Shaka Farma Logo"
                   fill
+                  sizes="40px"
                   className="object-cover"
                 />
               </div>
@@ -103,7 +104,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="border-t border-primary-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-20 sm:pb-4">
           <p className="text-xs text-primary-300 text-center">
             © {new Date().getFullYear()} Apotek Shaka Farma. All rights reserved.
           </p>

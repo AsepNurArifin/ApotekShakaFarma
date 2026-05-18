@@ -46,6 +46,7 @@ export default function Navbar() {
               src="/logo.jpeg" 
               alt="Apotek Shaka Farma Logo" 
               fill
+              sizes="40px"
               className="object-cover"
               priority
             />
