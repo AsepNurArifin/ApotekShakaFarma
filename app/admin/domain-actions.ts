@@ -22,10 +22,18 @@ import { Product, Article, Poster, Testimonial, Inquiry } from "@/lib/types";
 // ==========================================
 
 function getAdminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url) {
+    throw new Error("Variabel lingkungan 'NEXT_PUBLIC_SUPABASE_URL' belum diatur. Pastikan database URL Anda terkonfigurasi dengan benar.");
+  }
+  
+  if (!serviceKey) {
+    throw new Error("Variabel lingkungan 'SUPABASE_SERVICE_ROLE_KEY' (Service Role Key) belum diatur di server hosting (production) Anda. Silakan tambahkan 'SUPABASE_SERVICE_ROLE_KEY' di settings/environment variables hosting dashboard Anda (misal Vercel Dashboard) agar fitur Admin berfungsi.");
+  }
+
+  return createClient(url, serviceKey);
 }
 
 // Cache auth check untuk menghindari multiple calls
