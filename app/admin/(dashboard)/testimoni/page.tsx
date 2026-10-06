@@ -1,7 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Icons } from "@/components/ui/Icons";
-import { getTestimonials, updateTestimonial, deleteTestimonial } from "@/actions/domain-actions";
+import {
+  useAdminTestimonials,
+  useUpdateTestimonialMutation,
+  useDeleteTestimonialMutation,
+} from "@/hooks/queries/use-admin-data";
 
 type TestimonialRow = {
   id: string;
@@ -13,8 +17,10 @@ type TestimonialRow = {
 };
 
 export default function TestimoniPage() {
-  const [items, setItems] = useState<TestimonialRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: items = [], isLoading: loading } = useAdminTestimonials();
+  const updateMutation = useUpdateTestimonialMutation();
+  const deleteMutation = useDeleteTestimonialMutation();
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<TestimonialRow | null>(null);
   const [saving, setSaving] = useState(false);
@@ -22,49 +28,51 @@ export default function TestimoniPage() {
 
   function showFB(type: "success" | "error", msg: string) { setFeedback({ type, message: msg }); setTimeout(() => setFeedback(null), 4000); }
 
-  async function fetchItems() {
-    setLoading(true);
-    const res = await getTestimonials();
-    if (res.error) showFB("error", res.error);
-    setItems(res.data || []);
-    setLoading(false);
-  }
-  useEffect(() => { fetchItems(); }, []);
-
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true);
-    const fd = new FormData(e.currentTarget);
-    const ratingRaw = fd.get("rating") as string;
-    const record = { 
-      customer_name: fd.get("customer_name") as string, 
-      content: fd.get("content") as string, 
-      rating: parseInt(ratingRaw) || 5, 
-      is_published: fd.get("is_published") === "on" 
-    };
-    
-    if (!editing) {
-      showFB("error", "Testimoni hanya bisa diedit, tidak bisa ditambah manual");
+    try {
+      const fd = new FormData(e.currentTarget);
+      const ratingRaw = fd.get("rating") as string;
+      const record = { 
+        customer_name: fd.get("customer_name") as string, 
+        content: fd.get("content") as string, 
+        rating: parseInt(ratingRaw) || 5, 
+        is_published: fd.get("is_published") === "on" 
+      };
+      
+      if (!editing) {
+        showFB("error", "Testimoni hanya bisa diedit, tidak bisa ditambah manual");
+        setSaving(false);
+        return;
+      }
+      
+      await updateMutation.mutateAsync({ id: editing.id, data: record });
+      showFB("success", "Testimoni diupdate!");
+      setShowForm(false); setEditing(null);
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal mengupdate testimoni.");
+    } finally {
       setSaving(false);
-      return;
     }
-    
-    const res = await updateTestimonial(editing.id, record);
-    if (res.error) { showFB("error", res.error); setSaving(false); return; }
-    showFB("success", "Testimoni diupdate!");
-    setShowForm(false); setEditing(null); setSaving(false); fetchItems();
   }
 
   async function togglePublish(id: string, current: boolean) {
-    const res = await updateTestimonial(id, { is_published: !current });
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", current ? "Di-unpublish!" : "Di-publish!"); fetchItems();
+    try {
+      await updateMutation.mutateAsync({ id, data: { is_published: !current } });
+      showFB("success", current ? "Di-unpublish!" : "Di-publish!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal mengubah status publish.");
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Yakin hapus?")) return;
-    const res = await deleteTestimonial(id);
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", "Testimoni dihapus!"); fetchItems();
+    try {
+      await deleteMutation.mutateAsync(id);
+      showFB("success", "Testimoni dihapus!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal menghapus testimoni.");
+    }
   }
 
   return (<div>

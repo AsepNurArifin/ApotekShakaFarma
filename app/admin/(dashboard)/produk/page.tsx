@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Icons } from "@/components/ui/Icons";
-import { getProducts, createProduct, updateProduct, deleteProduct, adminUploadImage } from "@/actions/domain-actions";
-import { Product, Category, StockStatus } from "@/lib/types";
+import { adminUploadImage } from "@/actions/domain-actions";
+import {
+  useAdminProducts,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+} from "@/hooks/queries/use-admin-data";
+import { Category, StockStatus } from "@/lib/types";
 import { compressImage } from "@/lib/utils/image-compress";
 
 type ProductRow = {
@@ -23,8 +29,11 @@ type ProductRow = {
 };
 
 export default function ProdukPage() {
-  const [products, setProducts] = useState<ProductRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: products = [], isLoading: loading } = useAdminProducts();
+  const createMutation = useCreateProductMutation();
+  const updateMutation = useUpdateProductMutation();
+  const deleteMutation = useDeleteProductMutation();
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<ProductRow | null>(null);
   const [search, setSearch] = useState("");
@@ -38,26 +47,6 @@ export default function ProdukPage() {
     setFeedback({ type, message });
     setTimeout(() => setFeedback(null), 4000);
   }
-
-  async function fetchProducts() {
-    setLoading(true);
-    try {
-      const res = await getProducts();
-      if (res.error) {
-        showFB("error", `Gagal memuat: ${res.error}`);
-        console.error("Error fetching products:", res.error);
-      } else {
-        setProducts(res.data || []);
-      }
-    } catch (error) {
-      showFB("error", "Terjadi kesalahan saat memuat data");
-      console.error("Fetch products error:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => { fetchProducts(); }, []);
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -95,17 +84,18 @@ export default function ProdukPage() {
         image_url: imageUrl,
       };
 
-      const res = editing
-        ? await updateProduct(editing.id, record)
-        : await createProduct(record);
+      if (editing) {
+        await updateMutation.mutateAsync({ id: editing.id, data: record });
+        showFB("success", "Produk berhasil diupdate!");
+      } else {
+        await createMutation.mutateAsync(record);
+        showFB("success", "Produk berhasil ditambahkan!");
+      }
 
-      if (res.error) { showFB("error", `Gagal menyimpan: ${res.error}`); return; }
-      showFB("success", editing ? "Produk berhasil diupdate!" : "Produk berhasil ditambahkan!");
       setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null);
-      fetchProducts();
     } catch (err: any) {
       console.error("handleSave error:", err);
-      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
+      showFB("error", err.message || "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
     } finally {
       setSaving(false);
     }
@@ -113,10 +103,12 @@ export default function ProdukPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Yakin hapus produk ini?")) return;
-    const res = await deleteProduct(id);
-    if (res.error) { showFB("error", `Gagal menghapus: ${res.error}`); return; }
-    showFB("success", "Produk berhasil dihapus!");
-    fetchProducts();
+    try {
+      await deleteMutation.mutateAsync(id);
+      showFB("success", "Produk berhasil dihapus!");
+    } catch (err: any) {
+      showFB("error", `Gagal menghapus: ${err.message}`);
+    }
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {

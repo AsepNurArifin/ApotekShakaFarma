@@ -1,7 +1,13 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Icons } from "@/components/ui/Icons";
-import { getPosters, createPoster, updatePoster, deletePoster, adminUploadImage } from "@/actions/domain-actions";
+import { adminUploadImage } from "@/actions/domain-actions";
+import {
+  useAdminPosters,
+  useCreatePosterMutation,
+  useUpdatePosterMutation,
+  useDeletePosterMutation,
+} from "@/hooks/queries/use-admin-data";
 import { compressImage, formatFileSize } from "@/lib/utils/image-compress";
 
 type PosterRow = {
@@ -15,8 +21,11 @@ type PosterRow = {
 };
 
 export default function PosterPage() {
-  const [posters, setPosters] = useState<PosterRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: posters = [], isLoading: loading } = useAdminPosters();
+  const createMutation = useCreatePosterMutation();
+  const updateMutation = useUpdatePosterMutation();
+  const deleteMutation = useDeletePosterMutation();
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<PosterRow | null>(null);
   const [saving, setSaving] = useState(false);
@@ -28,22 +37,12 @@ export default function PosterPage() {
 
   function showFB(type: "success" | "error", msg: string) { setFeedback({ type, message: msg }); setTimeout(() => setFeedback(null), 4000); }
 
-  async function fetchPosters() {
-    setLoading(true);
-    const res = await getPosters();
-    if (res.error) showFB("error", res.error);
-    setPosters(res.data || []);
-    setLoading(false);
-  }
-  useEffect(() => { fetchPosters(); }, []);
-
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true);
     try {
       const fd = new FormData(e.currentTarget);
       let imageUrl = editing?.image_url || "";
       if (imageFile) {
-        // Kompres gambar otomatis sebelum upload
         const compressed = await compressImage(imageFile);
         const uploadFD = new FormData();
         uploadFD.append("file", compressed);
@@ -62,29 +61,40 @@ export default function PosterPage() {
         linked_product_ids: [],
       };
       
-      const res = editing ? await updatePoster(editing.id, record) : await createPoster(record);
-      if (res.error) { showFB("error", res.error); setSaving(false); return; }
-      showFB("success", editing ? "Poster diupdate!" : "Poster diupload!");
-      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); setCompressInfo(null); fetchPosters();
+      if (editing) {
+        await updateMutation.mutateAsync({ id: editing.id, data: record });
+        showFB("success", "Poster diupdate!");
+      } else {
+        await createMutation.mutateAsync(record);
+        showFB("success", "Poster diupload!");
+      }
+
+      setShowForm(false); setEditing(null); setImageFile(null); setImagePreview(null); setCompressInfo(null);
     } catch (err: any) {
       console.error("handleSave error:", err);
-      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
+      showFB("error", err.message || "Gagal menyimpan. Periksa koneksi internet Anda atau coba gambar yang lebih kecil.");
     } finally {
       setSaving(false);
     }
   }
 
   async function toggleActive(id: string, current: boolean) {
-    const res = await updatePoster(id, { is_active: !current });
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", current ? "Dinonaktifkan!" : "Diaktifkan!"); fetchPosters();
+    try {
+      await updateMutation.mutateAsync({ id, data: { is_active: !current } });
+      showFB("success", current ? "Dinonaktifkan!" : "Diaktifkan!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal memperbarui status poster.");
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Yakin hapus?")) return;
-    const res = await deletePoster(id);
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", "Poster dihapus!"); fetchPosters();
+    try {
+      await deleteMutation.mutateAsync(id);
+      showFB("success", "Poster dihapus!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal menghapus poster.");
+    }
   }
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {

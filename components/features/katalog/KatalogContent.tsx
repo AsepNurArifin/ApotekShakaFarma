@@ -5,10 +5,12 @@ import { useSearchParams } from "next/navigation";
 import { Product, Category, CategoryLabel } from "@/lib/types";
 import ProductCard from "@/components/ui/ProductCard";
 import { Icons } from "@/components/ui/Icons";
+import { useProductsInitial } from "@/hooks/queries/use-public-data";
 
 type SortOption = "popular" | "price-asc" | "price-desc" | "newest";
 
-export default function KatalogContent({ products }: { products: Product[] }) {
+export default function KatalogContent({ products: initialProducts }: { products: Product[] }) {
+  const { data: products = [] } = useProductsInitial(initialProducts);
   const searchParams = useSearchParams();
   const initialQ = searchParams.get("q") || "";
   const initialCat = searchParams.get("category") as Category | null;

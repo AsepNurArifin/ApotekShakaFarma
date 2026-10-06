@@ -1,7 +1,12 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Icons } from "@/components/ui/Icons";
-import { getArticles, createArticle, updateArticle, deleteArticle } from "@/actions/domain-actions";
+import {
+  useAdminArticles,
+  useCreateArticleMutation,
+  useUpdateArticleMutation,
+  useDeleteArticleMutation,
+} from "@/hooks/queries/use-admin-data";
 
 type ArticleRow = {
   id: string;
@@ -16,23 +21,17 @@ type ArticleRow = {
 };
 
 export default function ArtikelAdminPage() {
-  const [items, setItems] = useState<ArticleRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: items = [], isLoading: loading } = useAdminArticles();
+  const createMutation = useCreateArticleMutation();
+  const updateMutation = useUpdateArticleMutation();
+  const deleteMutation = useDeleteArticleMutation();
+
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<ArticleRow | null>(null);
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   function showFB(type: "success" | "error", msg: string) { setFeedback({ type, message: msg }); setTimeout(() => setFeedback(null), 4000); }
-
-  async function fetchItems() {
-    setLoading(true);
-    const res = await getArticles();
-    if (res.error) showFB("error", res.error);
-    setItems(res.data || []);
-    setLoading(false);
-  }
-  useEffect(() => { fetchItems(); }, []);
 
   async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true);
@@ -48,13 +47,19 @@ export default function ArtikelAdminPage() {
         image_url: null,
         related_product_ids: [],
       };
-      const res = editing ? await updateArticle(editing.id, record) : await createArticle(record);
-      if (res.error) { showFB("error", res.error); return; }
-      showFB("success", editing ? "Artikel diupdate!" : "Artikel ditambahkan!");
-      setShowForm(false); setEditing(null); fetchItems();
+
+      if (editing) {
+        await updateMutation.mutateAsync({ id: editing.id, data: record });
+        showFB("success", "Artikel diupdate!");
+      } else {
+        await createMutation.mutateAsync(record);
+        showFB("success", "Artikel ditambahkan!");
+      }
+
+      setShowForm(false); setEditing(null);
     } catch (err: any) {
       console.error("handleSave error:", err);
-      showFB("error", "Gagal menyimpan. Periksa koneksi internet Anda.");
+      showFB("error", err.message || "Gagal menyimpan. Periksa koneksi internet Anda.");
     } finally {
       setSaving(false);
     }
@@ -62,9 +67,12 @@ export default function ArtikelAdminPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Yakin hapus?")) return;
-    const res = await deleteArticle(id);
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", "Artikel dihapus!"); fetchItems();
+    try {
+      await deleteMutation.mutateAsync(id);
+      showFB("success", "Artikel dihapus!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal menghapus artikel.");
+    }
   }
 
   return (<div>

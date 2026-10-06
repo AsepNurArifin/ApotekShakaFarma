@@ -1,7 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Icons } from "@/components/ui/Icons";
-import { getInquiries, updateInquiryStatus } from "@/actions/domain-actions";
+import {
+  useAdminInquiries,
+  useUpdateInquiryMutation,
+} from "@/hooks/queries/use-admin-data";
 
 type InquiryRow = {
   id: string;
@@ -14,29 +17,23 @@ type InquiryRow = {
 };
 
 export default function InquiryPage() {
-  const [items, setItems] = useState<InquiryRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: allItems = [], isLoading: loading } = useAdminInquiries();
+  const updateMutation = useUpdateInquiryMutation();
+
   const [filter, setFilter] = useState<string>("ALL");
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   function showFB(type: "success" | "error", msg: string) { setFeedback({ type, message: msg }); setTimeout(() => setFeedback(null), 4000); }
 
-  async function fetchItems() {
-    setLoading(true);
-    const res = await getInquiries();
-    if (res.error) showFB("error", res.error);
-    const allItems = res.data || [];
-    // Filter di client side
-    const filtered = filter === "ALL" ? allItems : allItems.filter((i: InquiryRow) => i.status === filter);
-    setItems(filtered);
-    setLoading(false);
-  }
-  useEffect(() => { fetchItems(); }, [filter]);
+  const items = filter === "ALL" ? allItems : allItems.filter((i: InquiryRow) => i.status === filter);
 
   async function updateStatus(id: string, status: "NEW" | "FOLLOWED_UP" | "CLOSED") {
-    const res = await updateInquiryStatus(id, { status });
-    if (res.error) { showFB("error", res.error); return; }
-    showFB("success", status === "FOLLOWED_UP" ? "Ditindaklanjuti!" : "Selesai!"); fetchItems();
+    try {
+      await updateMutation.mutateAsync({ id, data: { status } });
+      showFB("success", status === "FOLLOWED_UP" ? "Ditindaklanjuti!" : "Selesai!");
+    } catch (err: any) {
+      showFB("error", err.message || "Gagal mengupdate status inquiry.");
+    }
   }
 
   const statusColors: Record<string, string> = { NEW: "bg-red-500/10 text-red-400", FOLLOWED_UP: "bg-amber-500/10 text-amber-400", CLOSED: "bg-green-500/10 text-green-400" };

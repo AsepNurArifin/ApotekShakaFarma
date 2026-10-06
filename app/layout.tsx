@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import PublicShell from "@/components/layout/PublicShell";
+import QueryProvider from "@/components/providers/query-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const viewport: Viewport = {
@@ -46,12 +47,14 @@ export default function RootLayout({
   return (
     <html lang="id" className="h-full antialiased">
       <body className="min-h-full flex flex-col font-sans bg-white" suppressHydrationWarning>
-        <PublicShell>
-          <div className="w-full max-w-[100vw] overflow-x-hidden">
-            {children}
-          </div>
-        </PublicShell>
-        <SpeedInsights />
+        <QueryProvider>
+          <PublicShell>
+            <div className="w-full max-w-[100vw] overflow-x-hidden">
+              {children}
+            </div>
+          </PublicShell>
+          <SpeedInsights />
+        </QueryProvider>
       </body>
     </html>
   );
