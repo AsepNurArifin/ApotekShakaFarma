@@ -1,11 +1,11 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProductById, getRelatedProducts } from "@/lib/public-data";
+import { getProductById, getRelatedProducts } from "@/lib/services/public-data";
 import { CategoryLabel, StockLabel } from "@/lib/types";
-import { formatPrice, getProductWALink } from "@/lib/whatsapp";
-import ProductCard from "../../components/ProductCard";
-import { Icons, getCategoryIcon } from "../../components/Icons";
+import { formatPrice, getProductWALink } from "@/lib/utils/whatsapp";
+import ProductCard from "@/components/ui/ProductCard";
+import { Icons, getCategoryIcon } from "@/components/ui/Icons";
 
 function getCatBadge(cat: string) {
   const m: Record<string, string> = { OB: "badge-ob", OBT: "badge-obt", SUPLEMEN: "badge-suplemen", HERBAL: "badge-herbal", ALKES: "badge-alkes", IBU_ANAK: "badge-ibu-anak" };
@@ -57,8 +57,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
           <div>
             <div className="flex flex-wrap gap-2 mb-4">
-              <span className={`badge ${getCatBadge(product.category)}`}>{CategoryLabel[product.category]}</span>
-              <span className={`badge ${getStockBadge(product.stockStatus)}`}>{StockLabel[product.stockStatus]}</span>
+              <span className={`badge ${getCatBadge(product.category)}`}>{CategoryLabel[product.category as keyof typeof CategoryLabel]}</span>
+              <span className={`badge ${getStockBadge(product.stockStatus)}`}>{StockLabel[product.stockStatus as keyof typeof StockLabel]}</span>
             </div>
             <h1 className="text-3xl font-extrabold text-text-primary mb-3">{product.name}</h1>
             <div className="mb-6">
@@ -82,7 +82,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               <div className="mb-6">
                 <h4 className="font-bold text-xs text-text-muted uppercase mb-2">Gejala Terkait</h4>
                 <div className="flex flex-wrap gap-2">
-                  {product.symptoms.map((s) => (
+                  {product.symptoms.map((s: string) => (
                     <Link key={s} href={`/katalog?q=${encodeURIComponent(s)}`} className="text-xs bg-gray-100 text-text-secondary px-3 py-1.5 rounded-full hover:bg-primary-50 hover:text-primary-700 transition-colors">{s}</Link>
                   ))}
                 </div>

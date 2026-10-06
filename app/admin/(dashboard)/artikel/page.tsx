@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getArticles, createArticle, updateArticle, deleteArticle } from "../../domain-actions";
+import { Icons } from "@/components/ui/Icons";
+import { getArticles, createArticle, updateArticle, deleteArticle } from "@/actions/domain-actions";
 
 type ArticleRow = {
   id: string;
@@ -39,11 +39,11 @@ export default function ArtikelAdminPage() {
     try {
       const fd = new FormData(e.currentTarget);
       const title = fd.get("title") as string;
-      const record = { 
-        title, 
-        slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""), 
-        excerpt: fd.get("excerpt") as string, 
-        content: fd.get("content") as string, 
+      const record = {
+        title,
+        slug: title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+        excerpt: fd.get("excerpt") as string,
+        content: fd.get("content") as string,
         is_published: fd.get("is_published") === "on",
         image_url: null,
         related_product_ids: [],

@@ -1,6 +1,6 @@
 "use client";
 
-import { getGeneralWALink } from "@/lib/whatsapp";
+import { getGeneralWALink } from "@/lib/utils/whatsapp";
 
 export default function WhatsAppFloat() {
   return (

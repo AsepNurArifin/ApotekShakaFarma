@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getProducts, createProduct, updateProduct, deleteProduct, adminUploadImage } from "../../domain-actions";
+import { Icons } from "@/components/ui/Icons";
+import { getProducts, createProduct, updateProduct, deleteProduct, adminUploadImage } from "@/actions/domain-actions";
 import { Product, Category, StockStatus } from "@/lib/types";
-import { compressImage } from "@/lib/image-compress";
+import { compressImage } from "@/lib/utils/image-compress";
 
 type ProductRow = {
   id: string;

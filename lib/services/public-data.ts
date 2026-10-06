@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { Product, Poster, Article, Testimonial, Category, StockStatus } from "./types";
+import { Product, Poster, Article, Testimonial, Category, StockStatus } from "@/lib/types";
 
 // Public Supabase client (anon key — safe for read-only public access)
 function getPublicClient() {

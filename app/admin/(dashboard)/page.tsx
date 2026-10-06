@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { Icons } from "../../components/Icons";
+import { Icons } from "@/components/ui/Icons";
 
 async function getStats() {
   const supabase = await createClient();

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { getGeneralWALink, getWAPhoneDisplay } from "@/lib/whatsapp";
-import { Icons } from "@/app/components/Icons";
+import { getGeneralWALink, getWAPhoneDisplay } from "@/lib/utils/whatsapp";
+import { Icons } from "@/components/ui/Icons";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",

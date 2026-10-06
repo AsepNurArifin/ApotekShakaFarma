@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getTestimonials, updateTestimonial, deleteTestimonial } from "../../domain-actions";
+import { Icons } from "@/components/ui/Icons";
+import { getTestimonials, updateTestimonial, deleteTestimonial } from "@/actions/domain-actions";
 
 type TestimonialRow = {
   id: string;

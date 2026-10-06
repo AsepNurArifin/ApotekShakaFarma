@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import { logoutAction } from "./actions";
-import { Icons } from "../components/Icons";
+import { logoutAction } from "@/actions/auth-actions";
+import { Icons } from "@/components/ui/Icons";
 
 interface AdminUser {
   email: string;

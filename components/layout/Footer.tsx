@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getGeneralWALink, getWAPhoneDisplay } from "@/lib/whatsapp";
-import { Icons } from "./Icons";
+import { getGeneralWALink, getWAPhoneDisplay } from "@/lib/utils/whatsapp";
+import { Icons } from "@/components/ui/Icons";
 
 export default function Footer() {
   return (

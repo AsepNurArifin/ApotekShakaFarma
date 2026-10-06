@@ -1,12 +1,12 @@
 import Link from "next/link";
 import React from "react";
 import { Category, CategoryLabel } from "@/lib/types";
-import { getGeneralWALink, getPosterWALink } from "@/lib/whatsapp";
-import { getPopularProducts, getActivePosters, getPosterProducts, getTestimonials } from "@/lib/public-data";
-import ProductCard from "./components/ProductCard";
-import SearchBar from "./components/SearchBar";
-import TestimonialCarousel from "./components/TestimonialCarousel";
-import { Icons, getCategoryIcon } from "./components/Icons";
+import { getGeneralWALink, getPosterWALink } from "@/lib/utils/whatsapp";
+import { getPopularProducts, getActivePosters, getPosterProducts, getTestimonials } from "@/lib/services/public-data";
+import ProductCard from "@/components/ui/ProductCard";
+import SearchBar from "@/components/ui/SearchBar";
+import TestimonialCarousel from "@/components/features/TestimonialCarousel";
+import { Icons, getCategoryIcon } from "@/components/ui/Icons";
 
 const categories = Object.values(Category);
 

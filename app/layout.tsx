@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import PublicShell from "./components/PublicShell";
+import PublicShell from "@/components/layout/PublicShell";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const viewport: Viewport = {

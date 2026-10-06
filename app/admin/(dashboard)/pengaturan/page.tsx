@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getProfiles, updateProfileRole } from "../../domain-actions";
+import { Icons } from "@/components/ui/Icons";
+import { getProfiles, updateProfileRole } from "@/actions/domain-actions";
 
 type ProfileRow = {
   id: string;

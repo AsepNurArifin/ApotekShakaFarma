@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { getArticles } from "@/lib/public-data";
-import { Icons } from "@/app/components/Icons";
+import { getArticles } from "@/lib/services/public-data";
+import { Icons } from "@/components/ui/Icons";
 
 export const metadata: Metadata = {
   title: "Artikel & Tips Kesehatan",

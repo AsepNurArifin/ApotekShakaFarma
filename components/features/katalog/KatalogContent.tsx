@@ -3,8 +3,8 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Product, Category, CategoryLabel } from "@/lib/types";
-import ProductCard from "../components/ProductCard";
-import { Icons } from "@/app/components/Icons";
+import ProductCard from "@/components/ui/ProductCard";
+import { Icons } from "@/components/ui/Icons";
 
 type SortOption = "popular" | "price-asc" | "price-desc" | "newest";
 

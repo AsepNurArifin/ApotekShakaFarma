@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { getProducts } from "@/lib/public-data";
-import KatalogContent from "./KatalogContent";
+import { getProducts } from "@/lib/services/public-data";
+import KatalogContent from "@/components/features/katalog/KatalogContent";
 
 export const metadata: Metadata = {
   title: "Katalog Produk",

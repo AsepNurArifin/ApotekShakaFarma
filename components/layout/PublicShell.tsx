@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import WhatsAppFloat from "./WhatsAppFloat";
+import WhatsAppFloat from "@/components/ui/WhatsAppFloat";
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

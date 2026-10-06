@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Category, StockStatus } from "./types";
+import { Category, StockStatus } from "@/lib/types";
 
 // ==========================================
 // VALIDATION SCHEMAS

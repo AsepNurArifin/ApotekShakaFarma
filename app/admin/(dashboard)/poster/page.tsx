@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getPosters, createPoster, updatePoster, deletePoster, adminUploadImage } from "../../domain-actions";
-import { compressImage, formatFileSize } from "@/lib/image-compress";
+import { Icons } from "@/components/ui/Icons";
+import { getPosters, createPoster, updatePoster, deletePoster, adminUploadImage } from "@/actions/domain-actions";
+import { compressImage, formatFileSize } from "@/lib/utils/image-compress";
 
 type PosterRow = {
   id: string;

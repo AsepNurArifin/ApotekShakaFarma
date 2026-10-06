@@ -2,8 +2,8 @@
 
 import { useActionState } from "react";
 import Image from "next/image";
-import { loginAction } from "../actions";
-import { Icons } from "@/app/components/Icons";
+import { loginAction } from "@/actions/auth-actions";
+import { Icons } from "@/components/ui/Icons";
 
 export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState(loginAction, null);

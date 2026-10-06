@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { getActivePosters, getPosterProducts } from "@/lib/public-data";
-import { getPosterWALink } from "@/lib/whatsapp";
-import ProductCard from "../components/ProductCard";
-import { Icons } from "../components/Icons";
+import { getActivePosters, getPosterProducts } from "@/lib/services/public-data";
+import { getPosterWALink } from "@/lib/utils/whatsapp";
+import ProductCard from "@/components/ui/ProductCard";
+import { Icons } from "@/components/ui/Icons";
 
 export const metadata: Metadata = {
   title: "Promosi",

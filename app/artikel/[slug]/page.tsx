@@ -1,9 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getArticleBySlug, getProductById } from "@/lib/public-data";
-import ProductCard from "../../components/ProductCard";
-import { Icons } from "../../components/Icons";
+import { getArticleBySlug, getProductById } from "@/lib/services/public-data";
+import ProductCard from "@/components/ui/ProductCard";
+import { Icons } from "@/components/ui/Icons";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -18,7 +18,7 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
   if (!article) notFound();
 
   // Fetch related products
-  const relatedProductPromises = (article.relatedProductIds || []).map((id) => getProductById(id));
+  const relatedProductPromises = (article.relatedProductIds || []).map((id: string) => getProductById(id));
   const relatedResults = await Promise.all(relatedProductPromises);
   const relatedProducts = relatedResults.filter(Boolean) as NonNullable<Awaited<ReturnType<typeof getProductById>>>[];
 
@@ -55,7 +55,7 @@ export default async function ArtikelDetailPage({ params }: { params: Promise<{ 
         {/* Content */}
         <div className="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-gray-100 mb-12">
           <div className="prose prose-lg max-w-none">
-            {article.content.split("\n\n").map((paragraph, i) => (
+            {article.content.split("\n\n").map((paragraph: string, i: number) => (
               <p key={i} className="text-text-secondary leading-relaxed mb-4 whitespace-pre-line">
                 {paragraph}
               </p>

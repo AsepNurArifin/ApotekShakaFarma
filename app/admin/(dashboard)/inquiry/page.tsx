@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Icons } from "@/app/components/Icons";
-import { getInquiries, updateInquiryStatus } from "../../domain-actions";
+import { Icons } from "@/components/ui/Icons";
+import { getInquiries, updateInquiryStatus } from "@/actions/domain-actions";
 
 type InquiryRow = {
   id: string;

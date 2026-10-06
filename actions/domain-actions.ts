@@ -3,10 +3,10 @@
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { createClient } from "@supabase/supabase-js";
 import { cache } from "react";
-import { 
-  ProductSchema, 
-  ArticleSchema, 
-  PosterSchema, 
+import {
+  ProductSchema,
+  ArticleSchema,
+  PosterSchema,
   TestimonialSchema,
   InquiryUpdateSchema,
   ProductInput,
@@ -14,7 +14,7 @@ import {
   PosterInput,
   TestimonialInput,
   InquiryUpdateInput
-} from "@/lib/validation";
+} from "@/lib/schemas/validation";
 import { Product, Article, Poster, Testimonial, Inquiry } from "@/lib/types";
 
 // ==========================================
@@ -28,7 +28,7 @@ function getAdminClient() {
   if (!url) {
     throw new Error("Variabel lingkungan 'NEXT_PUBLIC_SUPABASE_URL' belum diatur. Pastikan database URL Anda terkonfigurasi dengan benar.");
   }
-  
+
   if (!serviceKey) {
     throw new Error("Variabel lingkungan 'SUPABASE_SERVICE_ROLE_KEY' (Service Role Key) belum diatur di server hosting (production) Anda. Silakan tambahkan 'SUPABASE_SERVICE_ROLE_KEY' di settings/environment variables hosting dashboard Anda (misal Vercel Dashboard) agar fitur Admin berfungsi.");
   }
@@ -40,11 +40,11 @@ function getAdminClient() {
 const requireAuth = cache(async () => {
   const supabase = await createServerClient();
   const { data: { user }, error } = await supabase.auth.getUser();
-  
+
   if (error || !user) {
     throw new Error("Tidak memiliki akses");
   }
-  
+
   return user;
 });
 
@@ -60,7 +60,7 @@ export async function getProducts() {
       .from("products")
       .select("*")
       .order("created_at", { ascending: false });
-    
+
     if (error) {
       console.error("getProducts error:", error);
       return { data: null, error: error.message };
@@ -155,12 +155,12 @@ export async function createArticle(input: ArticleInput) {
 
 export async function updateArticle(id: string, input: Partial<ArticleInput>) {
   await requireAuth();
-  
+
   const validation = ArticleSchema.partial().safeParse(input);
   if (!validation.success) {
-    return { 
-      data: null, 
-      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") 
+    return {
+      data: null,
+      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ")
     };
   }
 
@@ -171,7 +171,7 @@ export async function updateArticle(id: string, input: Partial<ArticleInput>) {
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
@@ -225,12 +225,12 @@ export async function createPoster(input: PosterInput) {
 
 export async function updatePoster(id: string, input: Partial<PosterInput>) {
   await requireAuth();
-  
+
   const validation = PosterSchema.partial().safeParse(input);
   if (!validation.success) {
-    return { 
-      data: null, 
-      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") 
+    return {
+      data: null,
+      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ")
     };
   }
 
@@ -241,7 +241,7 @@ export async function updatePoster(id: string, input: Partial<PosterInput>) {
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
@@ -278,12 +278,12 @@ export async function getTestimonials() {
 
 export async function updateTestimonial(id: string, input: Partial<TestimonialInput>) {
   await requireAuth();
-  
+
   const validation = TestimonialSchema.partial().safeParse(input);
   if (!validation.success) {
-    return { 
-      data: null, 
-      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") 
+    return {
+      data: null,
+      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ")
     };
   }
 
@@ -294,7 +294,7 @@ export async function updateTestimonial(id: string, input: Partial<TestimonialIn
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
@@ -331,12 +331,12 @@ export async function getInquiries() {
 
 export async function updateInquiryStatus(id: string, input: InquiryUpdateInput) {
   await requireAuth();
-  
+
   const validation = InquiryUpdateSchema.safeParse(input);
   if (!validation.success) {
-    return { 
-      data: null, 
-      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") 
+    return {
+      data: null,
+      error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ")
     };
   }
 
@@ -347,7 +347,7 @@ export async function updateInquiryStatus(id: string, input: InquiryUpdateInput)
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
@@ -363,14 +363,14 @@ export async function getProfiles() {
     .from("profiles")
     .select("*")
     .order("created_at", { ascending: false });
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }
 
 export async function updateProfileRole(id: string, input: { role: "ADMIN" | "SUPERADMIN" }) {
   await requireAuth();
-  
+
   // Validasi role
   if (!["ADMIN", "SUPERADMIN"].includes(input.role)) {
     return { data: null, error: "Role tidak valid" };
@@ -383,7 +383,7 @@ export async function updateProfileRole(id: string, input: { role: "ADMIN" | "SU
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) return { data: null, error: error.message };
   return { data, error: null };
 }

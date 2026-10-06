@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Product } from "@/lib/types";
 import { CategoryLabel, StockLabel } from "@/lib/types";
-import { formatPrice, getProductWALink } from "@/lib/whatsapp";
+import { formatPrice, getProductWALink } from "@/lib/utils/whatsapp";
 import { getCategoryIcon } from "./Icons";
 
 function getCategoryBadgeClass(category: string): string {
